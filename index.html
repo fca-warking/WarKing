@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lời tỏ tình</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #ffe6e6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        .love-message {
+            font-size: 24px;
+            color: #ff3366;
+            font-weight: bold;
+            display: none;
+        }
+        .heart {
+            font-size: 50px;
+            color: red;
+            display: none;
+            animation: heartbeat 1s infinite alternate;
+        }
+        @keyframes heartbeat {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+        button {
+            background-color: #ff3366;
+            color: white;
+            font-size: 18px;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #ff6699;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Gửi đến người tớ thích ❤️</h1>
+        <p>Nhấn vào nút dưới đây để xem điều đặc biệt!</p>
+        <button onclick="showLove()">Bấm vào đây</button>
+        <div class="love-message" id="loveMessage">Anh/Em thích em/anh rất nhiều! ❤️</div>
+        <div class="heart" id="heart">❤️</div>
+    </div>
+
+    <script>
+        function showLove() {
+            document.getElementById("loveMessage").style.display = "block";
+            document.getElementById("heart").style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
