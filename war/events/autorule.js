@@ -9,7 +9,7 @@ module.exports.run = async function ({ api, event }) {
     const { readFileSync, writeFileSync } = global.nodemodule["fs-extra"];
     const { join } = global.nodemodule["path"];
       const { threadID } = event;
-      const pathData = join("modules", "commands", "cache", "rules.json");
+      const pathData = join("war", "warking", "cache", "rules.json");
   const thread = global.data.threadData.get(threadID) || {};
 if (typeof thread["rule"] != "undefined" && thread["rule"] == false) return;
        var dataJson = JSON.parse(readFileSync(pathData, "utf-8"));

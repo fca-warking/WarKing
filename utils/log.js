@@ -87,14 +87,14 @@ module.exports.loader = (data, option) => {
     const gradientData = createGradientText(data);
     switch (option) {
         case "warn":
-            console.log(createPrefixGradient('[ WARKING - V2] ', '#FFD700', '#FFA500') + gradientData);
+            console.log(createPrefixGradient('│ WarKing - V2 : ', '#FFD700', '#FFA500') + gradientData);
             break;
         case "error":
-            console.log(createPrefixGradient('[ WARKING - V2 ] ', '#FF0000', '#8B0000') + gradientData);
+            console.log(createPrefixGradient('│ WarKing - V2 :', '#FF0000', '#8B0000') + gradientData);
             break;
         default:
             // Gradient từ xanh ngọc sang xanh dương
-            console.log(createPrefixGradient('[ WARKING - V2 ] ', '#00FFFF', '#0000FF') + gradientData);
+            console.log(createPrefixGradient('│ WarKing - V2 : ', '#00FFFF', '#0000FF') + gradientData);
             break;
     }
 }

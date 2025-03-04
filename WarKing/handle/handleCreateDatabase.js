@@ -48,10 +48,10 @@ module.exports = function ({ Users, Threads, Currencies }) {
                             'data': {}
                         }), 
                         global.data.allUserID.push(String(singleData.id)), 
-                        logger(global.getText('handleCreateDatabase', 'newUser', singleData.id), '[ WARKING - V2 ]'));
+                        logger(global.getText('handleCreateDatabase', 'newUser', singleData.id), '├───────────────────⭓'));
                     } catch(e) { console.log(e) };
                 }
-                logger(global.getText('handleCreateDatabase', 'newThread', threadID), '[ WARKING - V2 ]');
+                logger(global.getText('handleCreateDatabase', 'newThread', threadID), '├───────────────────⭓');
             }
             if (!allUserID.includes(senderID) || !userName.has(senderID)) {
                 const infoUsers = await Users.getInfo(senderID),
@@ -60,7 +60,7 @@ module.exports = function ({ Users, Threads, Currencies }) {
                 await Users.createData(senderID, setting3);
                 allUserID.push(senderID);
                 userName.set(senderID, infoUsers.name);
-                logger(global.getText('handleCreateDatabase', 'newUser', senderID), '[ WARKING - V2 ]');
+                logger(global.getText('handleCreateDatabase', 'newUser', senderID), '├───────────────────⭓');
             }
             if (!allCurrenciesID.includes(senderID)) {
                 const setting4 = {};

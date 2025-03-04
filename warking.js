@@ -104,8 +104,6 @@ catch {
 
 try {
     for (const key in configValue) global.config[key] = configValue[key];
-    logger.loader("File Bot By Anh Quý")
-    logger.loader("Coder By Anh Quý")
     logger.loader("Succre Config");
 }
 catch { return logger.loader("Can't load file config!", "error") }
@@ -148,7 +146,7 @@ try {
     logger.loader(global.getText("mirai", "foundPathAppstate"))
 }
 catch { return logger.loader(global.getText("mirai", "notFoundPathAppstate"), "error") }
-console.log(chalk.bold.hex("#FFFF00").bold("[ WarKing - V2 ]"));
+console.log(chalk.bold.hex("#FFFF11").bold("├─────────────────────────⭓"));
 
 ////////////////////////////////////////////////////////////
 //== Đăng nhập tài khoản và bắt đầu lắng nghe sự kiện ====//
@@ -159,10 +157,10 @@ function onBot({ models }) {
     login(loginData, async(loginError, loginApiData) => {
         if (loginError) return logger(JSON.stringify(loginError), `ERROR`);
         const startMem = getMemoryInfo();
-        logger(`• RAM: ${startMem.ram.used}MB/${startMem.ram.total}MB • HEAP: ${startMem.heap.used}MB/${startMem.heap.total}MB`, "[ MEMORY ]");
+        logger(`• RAM: ${startMem.ram.used}MB/${startMem.ram.total}MB/${startMem.heap.total}MB`, "│ MEMORY :");
         setInterval(() => {
             const currentMem = getMemoryInfo();
-            logger(`• RAM: ${currentMem.ram.used}MB/${currentMem.ram.total}MB • HEAP: ${currentMem.heap.used}MB/${currentMem.heap.total}MB`, "[ MEMORY ]");
+            logger(`• RAM: ${currentMem.ram.used}MB/${currentMem.ram.total}MB/${currentMem.heap.total}MB`, "│ MEMORY :");
 }, 30000);
       global.client.api = loginApiData
         loginApiData.setOptions(global.config.FCAOption)

@@ -49,7 +49,7 @@
                 "InvaildMainColor": "%1 Không Phải Là Một Màu Hex !",
                 "IsNotABoolean": "%1 Không Phải Là Một Boolean, Cần Là true Hoặc false !",
                 "InvaildOption": "%1 Không Phải Là Một Lựa Chọn !",
-                "EncryptStateOff": "Tính Năng EncryptState Đã Bị Tắt !",
+                "EncryptStateOff": "đã tắt enc c3c",
 
                 "AutoLogin": "AutoLogin Đang Bật, Tiến Hành Đăng Nhập Lại !",
                 "TypeAccount": "Anh Quý Đẹp Trai Không: ",

@@ -1,146 +1,111 @@
 const chalk = require('chalk');
 const moment = require("moment-timezone");
+
+// Hàm chuyển từ HEX sang RGB
 function hexToRgb(hex) {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
+    const bigint = parseInt(hex.slice(1), 16);
+    return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
 }
+
+// Hàm nội suy màu giữa hai điểm
 function interpolateColor(color1, color2, factor) {
     const rgb1 = hexToRgb(color1);
     const rgb2 = hexToRgb(color2);
-    
-    if (!rgb1 || !rgb2) return '#000000';
 
     const r = Math.round(rgb1.r + factor * (rgb2.r - rgb1.r));
     const g = Math.round(rgb1.g + factor * (rgb2.g - rgb1.g));
     const b = Math.round(rgb1.b + factor * (rgb2.b - rgb1.b));
-    
-    return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+
+    return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
 }
-// Mảng màu gradient mới
-const gradientPalettes = [
-    ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'], // Cầu vồng
-    ['#FF0000', '#FF00FF', '#9400D3', '#4B0082'], // Đỏ tím
-    ['#00FF00', '#00FFFF', '#0000FF', '#4B0082'], // Xanh dương
-    ['#FFD700', '#FFA500', '#FF4500', '#8B0000'], // Vàng cam đỏ
-    ['#00FF00', '#00FA9A', '#00CED1', '#0000FF']  // Xanh lá biển
-];
 
-let currentPalette = 0;
-let currentIndex = 0;
-
-function createLineGradient(text, colors) {
+// Hàm tạo gradient chuyển màu mượt mà từ xanh → tím → đỏ
+function createGradientText(text, colors) {
     const chars = text.split('');
-    let result = '';
-    const totalChars = chars.length;
-    
+    const total = chars.length;
+    let gradientText = '';
+
     chars.forEach((char, i) => {
-        const section = (i / totalChars) * (colors.length - 1);
-        const colorIndex = Math.floor(section);
-        const factor = section - colorIndex;
-        
-        const color = interpolateColor(
-            colors[colorIndex],
-            colors[colorIndex + 1] || colors[colorIndex],
-            factor
-        );
-        result += chalk.hex(color)(char);
+        const section = (i / total) * (colors.length - 1);
+        const index = Math.floor(section);
+        const factor = section - index;
+
+        const color = interpolateColor(colors[index], colors[index + 1] || colors[index], factor);
+        gradientText += chalk.hex(color)(char);
     });
-    
-    return result;
+
+    return gradientText;
 }
+
+// Bảng màu: từ Xanh → Tím → Đỏ
+const gradientColors = ['#00FFFF', '#8A2BE2', '#FF4500'];
 
 module.exports.config = {
     name: "console",
-    version: "1.3.0",
+    version: "1.4.0",
     hasPermssion: 3,
-    credits: "JRT modified by Satoru",
-    description: "Bật/tắt ghi log console với gradient",
+    credits: "JRT modified by Satoru, gradient improved by ChatGPT",
+    description: "Bật/tắt ghi log console với gradient chuyển dần",
     commandCategory: "Admin",
     usages: "[on/off]",
     cooldowns: 5,
 };
 
-module.exports.handleEvent = async function ({ api, args, Users, event, Threads, utils, client }) {
-    const { threadID, messageID, senderID, isGroup } = event;
-    
-    if (global.data.console == false) return;
+// Đảm bảo ghi log mặc định bật
+if (typeof global.data.console === "undefined") {
+    global.data.console = true;
+}
+
+module.exports.handleEvent = async function ({ api, event, Users, Threads }) {
+    if (!global.data.console) return;
 
     moment.locale('vi');
-    var time = moment().format('HH:mm DD/MM/YYYY');
-    
-    var nameBox = "Tin nhắn riêng";
+    const time = moment().format('HH:mm DD/MM/YYYY');
+    const { threadID, senderID, body, isGroup } = event;
+
+    // Lấy tên nhóm
+    let nameBox = "Tin nhắn riêng";
     if (isGroup) {
         try {
             const threadInfo = await Threads.getInfo(threadID);
             nameBox = threadInfo.threadName || "Tên không tồn tại";
-        } catch (err) {
-            console.error("Error getting thread info:", err);
+        } catch {
             nameBox = "Lỗi lấy tên nhóm";
         }
     }
-    var groupOrPrivate = isGroup ? '👥 Nhóm' : '👤 Cá nhân';
 
-    var nameUser = await Users.getNameUser(senderID) || "Tên không tồn tại";
-    var msg = event.body || "Ảnh, video hoặc kí tự đặc biệt";
+    // Lấy tên người gửi
+    let nameUser = "Không xác định";
+    try {
+        nameUser = await Users.getNameUser(senderID);
+    } catch {}
 
-    if (event.attachments && event.attachments.length > 0) {
+    // Nội dung tin nhắn
+    let msg = body || "Ảnh, video hoặc kí tự đặc biệt";
+    if (event.attachments?.length) {
         msg = event.attachments.map(att => att.type === 'photo' ? 'Ảnh' : 'Video').join(', ');
     }
 
+    // Xác định bot hay người dùng
     const isBot = senderID == api.getCurrentUserID();
     const botLabel = isBot ? '[BOT] ' : '';
 
-    // Rotate through gradient palettes
-    currentIndex = (currentIndex + 1) % 10;
-    if (currentIndex === 0) {
-        currentPalette = (currentPalette + 1) % gradientPalettes.length;
-    }
-    
-    const currentColors = gradientPalettes[currentPalette];
-    
-    const topBorder = '╔══════════════════════════════════════════════════════════════════╗';
-    const bottomBorder = '╚═════════════════════════ Satoru ═════════════════════════════════╝';
-    const line = '║';
-    const space = ' '.repeat(64 - nameBox.length - groupOrPrivate.length);
-    const truncate = (str, maxLength) => str.length > maxLength ? str.slice(0, maxLength - 3) + '...' : str;
-
-    // Tạo gradient cho từng dòng với màu sắc khác nhau
-    console.log(createLineGradient(topBorder, currentColors));
-    console.log(createLineGradient(`${line} ${groupOrPrivate} ${nameBox}${space}`, currentColors));
-    console.log(createLineGradient(`${line} Người dùng: ${botLabel}${truncate(nameUser, 52 - botLabel.length)}`, currentColors));
-    console.log(createLineGradient(`${line} Tin nhắn: ${truncate(msg, 54)}`, currentColors));
-    console.log(createLineGradient(`${line} Thời gian: ${truncate(time, 52)}`, currentColors));
-    console.log(createLineGradient(`${line} ID: ${truncate(senderID, 58)}`, currentColors));
-    console.log(createLineGradient(bottomBorder, currentColors));
+    // In log ra console với màu gradient chuyển dần
+    console.log(createGradientText(`├────────────────────────────────────⭓`, gradientColors));
+    console.log(createGradientText(`│ Nhóm: ${nameBox}`, gradientColors));
+    console.log(createGradientText(`│ Người gửi: ${botLabel}${nameUser}`, gradientColors));
+    console.log(createGradientText(`│ Tin nhắn: `, gradientColors));
+    console.log(createGradientText(`│ Thời gian: ${time}`, gradientColors));
+    console.log(createGradientText(`├────────────────────────────────────⭓`, gradientColors));
 };
 
-module.exports.run = async function ({ api, args, Users, event, Threads, utils, client }) {
+module.exports.run = function ({ api, args, event }) {
     const { threadID, messageID } = event;
-    
-    if (args.length === 0) {
-        return api.sendMessage("Vui lòng sử dụng on hoặc off.", threadID, messageID);
+
+    if (!args[0] || !["on", "off"].includes(args[0].toLowerCase())) {
+        return api.sendMessage("Vui lòng sử dụng 'on' hoặc 'off'.", threadID, messageID);
     }
 
-    const action = args[0].toLowerCase();
-
-    if (action === "on") {
-        global.data.console = true;
-        return api.sendMessage("Đã bật ghi log console với hiệu ứng gradient.", threadID, messageID);
-    } else if (action === "off") {
-        global.data.console = false;
-        return api.sendMessage("Đã tắt ghi log console.", threadID, messageID);
-    } else {
-        return api.sendMessage("Cú pháp không hợp lệ. Vui lòng sử dụng on hoặc off.", threadID, messageID);
-    }
+    global.data.console = args[0].toLowerCase() === "on";
+    api.sendMessage(`Ghi log console đã được ${global.data.console ? "bật" : "tắt"}.`, threadID, messageID);
 };
-
-// Clear console với gradient
-setInterval(() => {
-    console.clear();
-    const clearMessage = 'Console đã được xóa 🗑️';
-    console.log(createLineGradient(clearMessage, gradientPalettes[0]));
-}, 30 * 60 * 1000);

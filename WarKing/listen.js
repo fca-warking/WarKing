@@ -140,7 +140,7 @@ module.exports = function ({ api, models }) {
 
   (async function () {
     try {
-      logger(global.getText("listen", "startLoadEnvironment"), "[ DATABASE ]");
+      logger(global.getText("listen", "startLoadEnvironment"), "│ Database :");
       let threads = await Threads.getAll(),
         users = await Users.getAll(["userID", "name", "data"]),
         currencies = await Currencies.getAll(["userID"]);
@@ -192,7 +192,7 @@ module.exports = function ({ api, models }) {
       logger.loader(global.getText("listen", "loadedEnvironmentUser")),
         logger(
           global.getText("listen", "successLoadEnvironment"),
-          "[ WARKING - V2 ]"
+          "│ WarKing :"
         );
     } catch (error) {
       return logger.loader(
@@ -207,7 +207,7 @@ module.exports = function ({ api, models }) {
         ? "This bot was made by CatalizCS and SpermLord"
         : global.config.BOTNAME
     }`,
-    "[ BOT INFO ]"
+    "│ BOT INFO :"
   );
 
   ///////////////////////////////////////////////

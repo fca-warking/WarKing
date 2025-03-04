@@ -16,9 +16,9 @@ mirai.cantLoadConfig=Không thể tải config của module %1, lỗi: %2
 mirai.cantOnload=Không thể khởi chạy setup của module %1, lỗi: %1
 mirai.successLoadModule=𝐒𝐮𝐜𝐜𝐞𝐬𝐬 𝐋𝐨𝐚𝐝 𝐌𝐨𝐝𝐮𝐥𝐞𝐬 %1
 mirai.failLoadModule=Không thể tải modules: %1
-mirai.finishLoadModule=Đã Tải Thành Công %1 Modules và %2 Event
-mirai.foundPathAppstate=Đã tìm thấy file Appstate
-mirai.notFoundPathAppstate=Không tìm thấy file Appstate
+mirai.finishLoadModule=Đã Load Xong %1 lệnh 
+mirai.foundPathAppstate=Đang Khởi Động Appstate
+mirai.notFoundPathAppstate=Mày gắn Appstate chưa ??
 mirai.checkListGban=Vui lòng chờ kiểm tra danh sách Global ban\n=======================================
 mirai.banDevice=Hiện tại thiết bị của bạn đã bị ban khỏi miraiproject, liên hệ tới facebook https://www.facebook.com/wind.009 để biết thêm thông tin chi tiết hoặc xin key unban, nếu bạn đã có key unban hãy điền vào bên dưới!
 mirai.keyNotSameFormat=Dữ liệu bạn nhập phải là một dãy số bao gồm 6 chữ số!
@@ -36,9 +36,9 @@ mirai.failConnectDatabase=Kết nối đến cơ sở dữ liệu thất bại, 
 
 listen.startLoadEnvironment=Tiến hành tải dữ liệu
 listen.loadedEnvironmentThread=Đã tải xong dữ liệu
-listen.loadedEnvironmentUser=Bot Zuri Bắt Đầu Nhận Lệnh
-listen.successLoadEnvironment=Khởi tạo thành công biến môi trường cho người dùng và nhóm
-listen.failLoadEnvironment=Khởi tạo biến môi trường không thành công, lỗi: %1
+listen.loadedEnvironmentUser=WARKING - V2 đã khởi động
+listen.successLoadEnvironment=Đã Chạy Xong Database
+listen.failLoadEnvironment=Tạo biến môi trường không thành công, lỗi: %1
 
 # includes/controller/currencies.js
 
@@ -77,8 +77,8 @@ handleCommandEvent.moduleError=Đã xảy ra lỗi không mong muốn tại lệ
 
 # includes/handle/handleCreateDatabase.js
 
-handleCreateDatabase.newThread=Load Dữ Liệu Nhóm Mới: %1
-handleCreateDatabase.newUser=Load Dữ Liệu Người Dùng Mới: %1
+handleCreateDatabase.newThread=\n│ Load Dữ Liệu Nhóm Mới: %1
+handleCreateDatabase.newUser=│\n Load Dữ Liệu Người Dùng Mới: %1
 
 # includes/handle/handleEvent.js
 

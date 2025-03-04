@@ -226,7 +226,7 @@ function listenMqtt(defaultFuncs, api, ctx, globalCallback) {
         }
 
         if (process.env.OnStatus === undefined) {
-            global.Fca.Require.logger.Normal('Horizon Prime');
+            global.Fca.Require.logger.Normal('BOT WAR BY ANH QUÝ\n│\n│.       ───▄▀▀▀▄▄▄▄▄▄▄▀▀▀▄───\n│.       ───█▒▒░░░░░░░░░▒▒█───\n│.       ────█░░█░░░░░█░░█────\n│.       ─▄▄──█░░░▀█▀░░░█──▄▄─\n│.       █░░█─▀▄░░░░░░░▄▀─█░░█\n│.       █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█\n│.       █░░File By Anh Quý ░░█\n│.       █░░VERISION : 2.0.0░░█\n│.       █░░ WarKing - V2   ░░█\n│.       █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█\n│\n│');
 
             const MemoryManager = require('../Extra/Src/Release_Memory');
             const path = require('path');
